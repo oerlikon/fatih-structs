@@ -23,11 +23,11 @@ func ExampleNew() {
 	fmt.Printf("Name        : %v\n", s.Name())
 	fmt.Printf("Values      : %v\n", s.Values())
 	fmt.Printf("Value of ID : %v\n", s.Field("ID").Value())
+
 	// Output:
 	// Name        : Server
 	// Values      : [Arslan 123456 true]
 	// Value of ID : 123456
-
 }
 
 func ExampleMap() {
@@ -48,11 +48,11 @@ func ExampleMap() {
 	fmt.Printf("%#v\n", m["Name"])
 	fmt.Printf("%#v\n", m["ID"])
 	fmt.Printf("%#v\n", m["Enabled"])
+
 	// Output:
 	// "Arslan"
 	// 123456
 	// true
-
 }
 
 func ExampleMap_tags() {
@@ -74,11 +74,11 @@ func ExampleMap_tags() {
 	fmt.Printf("%#v\n", m["server_name"])
 	fmt.Printf("%#v\n", m["server_id"])
 	fmt.Printf("%#v\n", m["enabled"])
+
 	// Output:
 	// "Zeynep"
 	// 789012
 	// false
-
 }
 
 func ExampleMap_omitNested() {
@@ -105,6 +105,7 @@ func ExampleMap_omitNested() {
 	fmt.Printf("%v\n", m["server_name"])
 	fmt.Printf("%v\n", m["server_id"])
 	fmt.Printf("%v\n", m["time"].(time.Time))
+
 	// Output:
 	// Zeynep
 	// 789012
@@ -129,6 +130,7 @@ func ExampleMap_omitEmpty() {
 
 	// map contains only the Location field
 	fmt.Printf("%v\n", m)
+
 	// Output:
 	// map[Location:Tokyo]
 }
@@ -149,6 +151,7 @@ func ExampleValues() {
 	m := Values(s)
 
 	fmt.Printf("Values: %+v\n", m)
+
 	// Output:
 	// Values: [Fatih 135790 false]
 }
@@ -171,6 +174,7 @@ func ExampleValues_omitEmpty() {
 
 	// values contains only the Location field
 	fmt.Printf("Values: %+v\n", m)
+
 	// Output:
 	// Values: [Ankara]
 }
@@ -200,6 +204,7 @@ func ExampleValues_tags() {
 	m := Values(s)
 
 	fmt.Printf("Values: %+v\n", m)
+
 	// Output:
 	// Values: [Fatih 135790 false]
 }
@@ -291,7 +296,6 @@ func ExampleField() {
 
 	// Output:
 	// Value of Person.Access.Name: fatih
-
 }
 
 func ExampleIsZero() {
@@ -314,6 +318,7 @@ func ExampleIsZero() {
 
 	fmt.Printf("%#v\n", isZeroA)
 	fmt.Printf("%#v\n", isZeroB)
+
 	// Output:
 	// true
 	// false
@@ -345,6 +350,7 @@ func ExampleHasZero() {
 
 	fmt.Printf("%#v\n", hasZeroA)
 	fmt.Printf("%#v\n", hasZeroB)
+
 	// Output:
 	// true
 	// false
