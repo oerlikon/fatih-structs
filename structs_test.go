@@ -335,6 +335,7 @@ func TestMap_NestedMapWithStringValues(t *testing.T) {
 		t.Errorf("Map nested struct's name field should give example, got: %s", name)
 	}
 }
+
 func TestMap_NestedMapWithInterfaceValues(t *testing.T) {
 	type B struct {
 		Foo map[string]interface{}
@@ -683,6 +684,7 @@ func TestFillMap_Nil(t *testing.T) {
 	// nil should no
 	FillMap(T, nil)
 }
+
 func TestStruct(t *testing.T) {
 	var T = struct{}{}
 

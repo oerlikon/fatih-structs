@@ -3,7 +3,6 @@ package structs
 
 import (
 	"fmt"
-
 	"reflect"
 )
 
@@ -277,7 +276,6 @@ func (s *Struct) Field(name string) *Field {
 	if !ok {
 		panic("field not found")
 	}
-
 	return f
 }
 
