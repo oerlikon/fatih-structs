@@ -209,14 +209,10 @@ func TestField_Zero(t *testing.T) {
 func TestField(t *testing.T) {
 	s := newStruct()
 
-	defer func() {
-		err := recover()
-		if err == nil {
-			t.Error("Retrieveing a non existing field from the struct should panic")
-		}
-	}()
-
-	_ = s.Field("no-field")
+	f := s.Field("no-field")
+	if f != nil {
+		t.Error("Retrieving a non-existing field from the struct should return nil")
+	}
 }
 
 func TestField_Kind(t *testing.T) {
@@ -342,26 +338,20 @@ func TestField_Name(t *testing.T) {
 
 func TestField_Field(t *testing.T) {
 	s := newStruct()
-
 	e := s.Field("Bar").Field("E")
 
 	val, ok := e.Value().(string)
 	if !ok {
-		t.Error("The value of the field 'e' inside 'Bar' struct should be string")
+		t.Error("The value of field 'E' inside 'Bar' struct should be string")
 	}
-
 	if val != "example" {
-		t.Errorf("The value of 'e' should be 'example, got: %s", val)
+		t.Errorf("The value of field 'E' should be 'example', got: %s", val)
 	}
 
-	defer func() {
-		err := recover()
-		if err == nil {
-			t.Error("Field of a non existing nested struct should panic")
-		}
-	}()
-
-	_ = s.Field("Bar").Field("e")
+	f := s.Field("Bar").Field("e")
+	if f != nil {
+		t.Error("Non-existing field from a nested struct should return nil")
+	}
 }
 
 func TestField_Fields(t *testing.T) {
@@ -373,24 +363,23 @@ func TestField_Fields(t *testing.T) {
 	}
 }
 
-func TestField_FieldOk(t *testing.T) {
+func TestField_FieldNotNil(t *testing.T) {
 	s := newStruct()
 
-	b, ok := s.FieldOk("Bar")
-	if !ok {
-		t.Error("The field 'Bar' should exists.")
+	b := s.Field("Bar")
+	if b == nil {
+		t.Error("The field 'Bar' should exist.")
 	}
 
-	e, ok := b.FieldOk("E")
-	if !ok {
-		t.Error("The field 'E' should exists.")
+	e := b.Field("E")
+	if b == nil {
+		t.Error("The field 'E' should exist.")
 	}
 
 	val, ok := e.Value().(string)
 	if !ok {
 		t.Error("The value of the field 'e' inside 'Bar' struct should be string")
 	}
-
 	if val != "example" {
 		t.Errorf("The value of 'e' should be 'example, got: %s", val)
 	}
