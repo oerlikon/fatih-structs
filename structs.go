@@ -26,7 +26,7 @@ type Struct struct {
 func New(s interface{}) *Struct {
 	return &Struct{
 		raw:     s,
-		value:   strctVal(s),
+		value:   structVal(s),
 		TagName: DefaultTagName,
 	}
 }
@@ -270,31 +270,17 @@ func getFields(v reflect.Value, tagName string) []*Field {
 }
 
 // Field returns a new Field struct that provides several high level functions
-// around a single struct field entity. It panics if the field is not found.
+// around a single struct field entity or nil if the field was not found.
 func (s *Struct) Field(name string) *Field {
-	f, ok := s.FieldOk(name)
+	field, ok := s.value.Type().FieldByName(name)
 	if !ok {
-		panic("field not found")
+		return nil
 	}
-	return f
-}
-
-// FieldOk returns a new Field struct that provides several high level functions
-// around a single struct field entity. The boolean returns true if the field
-// was found.
-func (s *Struct) FieldOk(name string) (*Field, bool) {
-	t := s.value.Type()
-
-	field, ok := t.FieldByName(name)
-	if !ok {
-		return nil, false
-	}
-
 	return &Field{
 		field:      field,
 		value:      s.value.FieldByName(name),
 		defaultTag: s.TagName,
-	}, true
+	}
 }
 
 // IsZero returns true if all fields in a struct is a zero value (not
@@ -423,7 +409,7 @@ func (s *Struct) structFields() []reflect.StructField {
 	return f
 }
 
-func strctVal(s interface{}) reflect.Value {
+func structVal(s interface{}) reflect.Value {
 	v := reflect.ValueOf(s)
 
 	// if pointer get the underlying element≤
