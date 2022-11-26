@@ -12,7 +12,6 @@ type Foo struct {
 	C    bool   `json:"c"`
 	d    string // not exported
 	E    *Baz
-	x    string `xml:"x"` // not exported, with tag
 	Y    []string
 	Z    map[string]interface{}
 	*Bar // embedded
@@ -253,11 +252,6 @@ func TestField_Tag(t *testing.T) {
 		t.Errorf("Field's tag value of a non exported field should return empty, got: %s", v)
 	}
 
-	v = s.Field("x").Tag("xml")
-	if v != "x" {
-		t.Errorf("Field's tag value of a non exported field with a tag should return 'x', got: %s", v)
-	}
-
 	v = s.Field("A").Tag("json")
 	if v != "" {
 		t.Errorf("Field's tag value of a existing field without a tag should return empty, got: %s", v)
@@ -338,8 +332,16 @@ func TestField_Name(t *testing.T) {
 
 func TestField_Field(t *testing.T) {
 	s := newStruct()
-	e := s.Field("Bar").Field("E")
 
+	b := s.Field("Bar")
+	if b == nil {
+		t.Error("The field 'Bar' should exist.")
+	}
+
+	e := b.Field("E")
+	if e == nil {
+		t.Error("The field 'E' should exist.")
+	}
 	val, ok := e.Value().(string)
 	if !ok {
 		t.Error("The value of field 'E' inside 'Bar' struct should be string")
@@ -360,27 +362,5 @@ func TestField_Fields(t *testing.T) {
 
 	if len(fields) != 3 {
 		t.Errorf("We expect 3 fields in embedded struct, was: %d", len(fields))
-	}
-}
-
-func TestField_FieldNotNil(t *testing.T) {
-	s := newStruct()
-
-	b := s.Field("Bar")
-	if b == nil {
-		t.Error("The field 'Bar' should exist.")
-	}
-
-	e := b.Field("E")
-	if b == nil {
-		t.Error("The field 'E' should exist.")
-	}
-
-	val, ok := e.Value().(string)
-	if !ok {
-		t.Error("The value of the field 'e' inside 'Bar' struct should be string")
-	}
-	if val != "example" {
-		t.Errorf("The value of 'e' should be 'example, got: %s", val)
 	}
 }

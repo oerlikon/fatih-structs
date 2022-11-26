@@ -39,8 +39,15 @@ func TestStructIndexes(t *testing.T) {
 	_ = Map(&C{})
 	_ = Fields(&C{})
 	_ = Values(&C{})
-	_ = IsZero(&C{})
-	_ = HasZero(&C{})
+	if ok := IsZero(&C{something: 1}); !ok {
+		t.Error("IsZero should be true")
+	}
+	if ok := HasZero(&C{}); !ok {
+		t.Error("HasZero should be true")
+	}
+	if ok := !HasZero(&C{Props: map[string]interface{}{}}); !ok {
+		t.Error("HasZero should be false")
+	}
 }
 
 func TestMap(t *testing.T) {
@@ -1161,8 +1168,8 @@ func TestHasZero_OmitNested(t *testing.T) {
 	}
 	b := &B{A: a, C: 123}
 
-	// Because the Field A inside B is omitted  HasZero should return false
-	// because it will stop iterating deeper andnot going to lookup for D
+	// Because the Field A inside B is omitted HasZero should return false
+	// because it will stop iterating deeper and not going to lookup for D
 	ok := HasZero(b)
 	if ok {
 		t.Error("HasZero should return false because A and C are initialized")
